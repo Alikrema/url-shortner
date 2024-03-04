@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ShortnerModule } from './shortner/shortner.module';
+import { ShortnerModule } from './modules/shortner/shortner.module';
+import { RedirectModule } from './modules/redirect/redirect.module';
 
 @Module({
   imports: [
@@ -16,8 +17,7 @@ import { ShortnerModule } from './shortner/shortner.module';
       inject: [ConfigService],
     }),
     ShortnerModule,
+    RedirectModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
