@@ -38,13 +38,10 @@ jobs:
           container-name: urlshortner
           image: 992382704621.dkr.ecr.us-east-2.amazonaws.com/url-shortner:${{ github.sha }}
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - name: Force new deployment with updated task definition
+        run: |
+          aws ecs update-service --cluster url-short --service url-shortner --force-new-deployment
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        with:
-          service: url-shortner
-          cluster: url-short
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
