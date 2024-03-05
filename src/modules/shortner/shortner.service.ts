@@ -8,21 +8,24 @@ import { Url } from './schemas/url.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { HashService } from '../../utils/hash/hash.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ShortnerService {
   constructor(
     @InjectModel(Url.name) private readonly urlModel: Model<Url>,
+    private readonly configService: ConfigService,
     private readonly hashService: HashService,
   ) {}
 
   async createShortUrl(createShortUrlDto: CreateShortUrlDto) {
     const { url } = createShortUrlDto;
     const urlExists = await this.urlModel.findOne({ originalUrl: url });
+    const baseurl = this.configService.get<string>('BASE_URL');
     if (urlExists) {
       return {
         key: urlExists.key,
-        shortUrl: `http://localhost/${urlExists.key}`,
+        shortUrl: `${baseurl}/${urlExists.key}`,
         longUrl: url,
       };
     }
@@ -38,7 +41,7 @@ export class ShortnerService {
     });
     return {
       key,
-      shortUrl: `http://localhost/${key}`,
+      shortUrl: `${baseurl}/${key}`,
       longUrl: url,
     };
   }
