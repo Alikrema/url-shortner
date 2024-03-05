@@ -36,7 +36,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: urlshortner
-          image: $ECR_REPOSITORY:$IMAGE_TAG
+          image: 992382704621.dkr.ecr.us-east-2.amazonaws.com/url-shortner:latest
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
