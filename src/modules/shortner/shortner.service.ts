@@ -42,7 +42,7 @@ export class ShortnerService {
     return {
       key,
       shortUrl: `${baseurl}/${key}`,
-      longUrl: url,
+      longUrl: 'TEST DEPLOYMENT',
     };
   }
   async deleteShortUrl(key: string) {
