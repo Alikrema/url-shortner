@@ -1,73 +1,60 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# URL Shortener
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a simple URL shortener project that allows you to shorten long URLs into shorter, more manageable links. I made this to try out a CI/CD workflow and practice with AWS ECR & ECS services.
 
-## Installation
+## Cloud Architecture
 
-```bash
-$ npm install
-```
+The cloud architecture for the URL Shortener project involves using two servers running on ECS (Elastic Container Service) with a load balancer, a Docker container stored in ECR (Elastic Container Registry), and Route 53 for DNS management.
 
-## Running the app
+The load balancer distributes incoming traffic across the two ECS servers, ensuring high availability and scalability. The Docker container, which contains the URL shortener application, is stored in ECR, providing a secure and reliable container registry.
 
-```bash
-# development
-$ npm run start
+**DNS:** Route 53 is used for DNS management, allowing you to configure domain names and route traffic to the load balancer. This enables users to access the URL shortener application using a custom domain name.
 
-# watch mode
-$ npm run start:dev
+**Database:** The application connects to an M0 Free Tier MongoDB cluster on Atlas.
 
-# production mode
-$ npm run start:prod
-```
+Overall, this architecture ensures that the URL shortener is highly available, scalable, and can handle incoming traffic efficiently.
 
-## Test
+## Features
 
-```bash
-# unit tests
-$ npm run test
+- Shorten long URLs into shorter links
+- Redirect users to the original URL when they visit the shortened link
+- API for programmatically generating short links
 
-# e2e tests
-$ npm run test:e2e
+## Usage
 
-# test coverage
-$ npm run test:cov
-```
+1. Call the API `http://url-shortner-balancer-1855514818.us-east-2.elb.amazonaws.com/` with body `{"url":"www.example.com"}` using the original URL to be shortened
+2. Copy the generated short link and share it with others
+3. When someone visits the short link, they will be redirected to the original URL
 
-## Support
+## Local Installation
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. Clone the repository: `git clone https://github.com/alikrema/url-shortener.git`
+2. Install the required dependencies: `npm install`
+3. Configure the database connection in the `config.js` file
+4. Start the server: `npm start`
 
-## Stay in touch
+## API Documentation
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+The URL shortener also provides an API for programmatically generating short links. Here are the available endpoints:
+
+- `POST /`: Generate a short link for a given long URL
+- `GET /:key`: Get details of a specific shortened link using its 7-characters hash key
+- `DELETE /key`: Delete a shortened link
+
+## Future Enhancements
+
+- Use a custom domain name instead of passing the load balancer URL
+- Handle hash collisions
+- Create a caching layer to handle the celebrity problem load
+- Create a frontend client and try to center a div for 5 hours instead of optimizing the backend
+- Fix github workflow ECS deployment issue
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
